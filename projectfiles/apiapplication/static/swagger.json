@@ -1,0 +1,161 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Store API",
+    "version": "1.0.0",
+    "title": "Store API Testing",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Store API List",
+      "description": "Testing store API"
+    }
+  ],
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "CartProduct": {
+        "type": "object",
+        "properties": {
+          "cp_id": {
+            "type": "integer"
+          },
+          "cart_id": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "integer"
+          },
+          "quantity":{
+            "type":"integer"
+
+          }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "cart_id": {
+            "type": "integer"
+          },
+          "totalamount": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "cartproduct": {
+            "$ref": "#/components/schemas/CartProduct"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "type": "integer"
+          },
+          "role_name": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": "integer"
+          },
+          "category_name": {
+            "type": "string"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "float"
+          },
+          "product_id": {
+            "type": "integer"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          }
+        }
+      },
+      
+      "User": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          },
+          "user_name": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "user_role": {
+            "type": "integer"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "cart": {
+            "$ref": "#/components/schemas/Cart"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/public/product/search/{keyword}": {
+      "parameters": [
+        {
+          "name": "keyword",
+          "in": "path",
+          "required": true,
+          "description": "ID of the Role that we want to match",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Store API List"
+        ],
+        "summary": "Get Role request with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Product"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Book request not found."
+          }
+        }
+      }
+    }
+  }
+}
