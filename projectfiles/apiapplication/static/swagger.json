@@ -156,6 +156,38 @@
           }
         }
       }
+    },
+    "/api/public/cart":{
+      "get":{
+        "tags":[
+          "Store API List"
+        ],
+        "summary":"Get Cart request ",
+        "responses":{
+          "200":{
+            "description":"OK",
+            "schema":{
+              "$ref":"#/components/schemas/Cart"
+
+            }
+        },
+        "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+        "404": {
+            "description": "Failed. Book request not found."
+          }
+        }
+      }
+    },
+    "/api/publict/login":{
+      "post":{
+        "tags":[
+
+        ],
+        "summary":"Post Login request "
+      }
     }
+
   }
 }
