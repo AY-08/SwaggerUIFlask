@@ -21,6 +21,14 @@
     }
   ],
   "components": {
+    "securitySchemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT",
+      "description":"JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+
+    }},
     "schemas": {
       "CartProduct": {
         "type": "object",
@@ -125,7 +133,103 @@
       }
     }
   },
-  "paths": {
+  "paths": {    
+    "/api/public/login":{
+      "post":{
+        "tags":[
+          "Login Store API List"
+        ],
+        "summary":"Post Login request ",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "header",
+            "description": "ID of the requested TaxFiling",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "header",
+            "description": "an authorization header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "description":"username and password",
+          "required":true,
+          "content":{
+            "application/json":{
+              "schema":{
+            "type":"object",
+            "required":true
+            
+          }
+
+            }
+          }
+          
+        },
+        "responses":{ 
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema":{
+            "type":"object",
+            "required":true,
+            "properties":{
+              "username":{
+                "type":"string"
+              },
+              "password":{
+                "type":"string"
+              }
+            }
+          }
+              }
+            }
+          },
+          "401":{
+            "description":"Unauthorised User",
+            "schema":{
+              "$ref":"#/components/schemas/User"
+            }
+          }
+        }
+        
+      }
+    },
+    "/api/currentuser":{
+      "get":{"tags":[
+          "Login Store API List"
+        ],
+        "summary":"Getting current user",
+        "security":[{
+            "bearerAuth": []
+              }],
+        "responses":{
+          "200":{
+            "description":"successful operation",
+            "content": {
+              "application/json": {
+                "schema":{
+            "type":"object",
+            "required":true,
+            "properties":{
+              "username":{
+                "type":"string"
+              }
+            }
+          }
+              }
+            }
+          }
+        }
+
+      }
+    },
     "/api/public/product/search/{keyword}": {
       "parameters": [
         {
@@ -138,7 +242,7 @@
       ],
       "get": {
         "tags": [
-          "Store API List"
+          "Public Store API List"
         ],
         "summary": "Get Role request with given ID",
         "responses": {
@@ -160,7 +264,7 @@
     "/api/public/cart":{
       "get":{
         "tags":[
-          "Store API List"
+          "Public Store API List"
         ],
         "summary":"Get Cart request ",
         "responses":{
@@ -180,14 +284,55 @@
         }
       }
     },
-    "/api/publict/login":{
-      "post":{
-        "tags":[
 
+    "/api/auth/seller/product":{
+      "get":{
+        "tags":[
+          "Seller Store API List"
         ],
-        "summary":"Post Login request "
+        "summary":"Get product data for seller ",
+        "security":[
+          {
+            "bearerAuth":[]
+          }
+        ],
+        "responses":{
+          "200":{
+            "description":"OK",
+            "schema":{
+              "$ref":"#/components/schemas/Product"
+            }
+          }
+        }
+
+      },
+      "put":{
+        "tags":[
+          "Seller Store API List"
+        ],
+        "summary":"Creating new entry of product",
+        "security":[{
+          "bearerAuth":[] 
+
+        }],
+        "responses":{
+          "200":{
+            "description":"OK",
+            "schema":{
+              "$ref":"#/components/schemas/Product"
+            }
+
+          },
+          "409":{
+            "description":"Procuct already present"
+
+          }
+        }
+
       }
+
     }
+
 
   }
 }
